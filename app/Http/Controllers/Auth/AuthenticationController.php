@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\User\UserController;
 use App\Models\User;
 use App\Rules\PhoneOrEmail;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -61,5 +62,29 @@ class AuthenticationController extends Controller
         }
 
         return $response;
+    }
+
+    public static function checkCode(Request $request)
+    {
+        $request->validate([
+            'code' => 'digits:5'
+        ]);
+
+        $user = User::find(auth()->id());
+        $user_code = $user->verification_code;
+
+        if($request->code == $user_code) {
+
+            $user->account_verified_at = Carbon::now();
+            $user->verification_code = null;
+            $user->save();
+
+            return response('valid');
+            
+        } else {
+
+            return response('unvalid',  409);
+
+        }
     }
 }

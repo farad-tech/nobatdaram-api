@@ -22,4 +22,5 @@ Route::prefix('/auth')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/check-auth', [AuthenticationController::class, 'checkAuth']);
+  Route::post('/check-code', [AuthenticationController::class, 'checkCode']);
 });
