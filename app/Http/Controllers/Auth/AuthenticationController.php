@@ -54,37 +54,10 @@ class AuthenticationController extends Controller
 
         if($user->account_verified_at == null) {
             $response = response('authenticated', 202);
-            
-            $verification_code = rand(10000, 99999);
 
-            $user->verification_code = $verification_code;
-            $user->save();
+            // send code method should be placed here
         }
 
         return $response;
-    }
-
-    public static function checkCode(Request $request)
-    {
-        $request->validate([
-            'code' => 'digits:5'
-        ]);
-
-        $user = User::find(auth()->id());
-        $user_code = $user->verification_code;
-
-        if($request->code == $user_code) {
-
-            $user->account_verified_at = Carbon::now();
-            $user->verification_code = null;
-            $user->save();
-
-            return response('valid');
-            
-        } else {
-
-            return response('unvalid',  409);
-
-        }
     }
 }
