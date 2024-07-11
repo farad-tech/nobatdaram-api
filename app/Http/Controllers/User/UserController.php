@@ -19,4 +19,12 @@ class UserController extends Controller
         ]);
 
     }
+
+    public static function resetPassword($phoneoremail, $password) {
+
+        return User::where('phoneoremail', $phoneoremail)->update([
+            'password' => Hash::make($password),
+        ]);
+
+    }
 }
