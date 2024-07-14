@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\VerificationCodeController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,5 +34,5 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/check-code', [VerificationCodeController::class, 'checkCode']);
   Route::post('/send-code', [VerificationCodeController::class, 'sendCodeToUser'])->middleware(['throttle:1,2']); // one request per 1 minute (throttle:1,1)
 
-
+  Route::apiResource('profile', ProfileController::class);
 });
