@@ -34,5 +34,6 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/check-code', [VerificationCodeController::class, 'checkCode']);
   Route::post('/send-code', [VerificationCodeController::class, 'sendCodeToUser'])->middleware(['throttle:1,2']); // one request per 1 minute (throttle:1,1)
 
+  Route::delete('profile/delete-avatar', [ProfileController::class, 'deleteAvatar']);
   Route::apiResource('profile', ProfileController::class);
 });

@@ -45,18 +45,14 @@ class ProfileController extends Controller
         $user_id = auth()->id();
 
         $data = [
-            'name' => Str::random(4) . '-' . rand(100, 999),
-            'avatar' => '/storage/avatar.jpg',
+            'name' => $request->name,
         ];
 
         if($request->avatar !== null) {
-            $data['avatar'] = '/storage/' .$request->file('avatar')->store('avatars');            
+            $data['avatar'] = '/storage/'.Storage::disk('public')->put('/avatars', $request->file('avatar'));       
         }
 
-        Profile::updateOrCreate(
-            ['user_id' => $user_id],
-            $data
-        );
+        Profile::where('user_id', $user_id)->update($data);
 
         return response('Profile updated!');
     }
@@ -83,5 +79,20 @@ class ProfileController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function deleteAvatar()
+    {
+
+        $profile = Profile::where('user_id', auth()->id())->first();
+
+        Storage::disk('public')->delete($profile->avatar);
+
+        $profile->avatar = '/storage/avatar.jpg';
+
+        $profile->save();
+
+        return response('Avatar removed');
+
     }
 }
