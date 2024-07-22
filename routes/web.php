@@ -22,7 +22,7 @@ Route::get('/', function () {
 
     // (new VerifyCode(['11111'], '09352760807'))->go();
     
-    Mail::to('farhadkarami@yahoo.com')->send(new SendVerifyCode('48377'));
+    // Mail::to('farhadkarami@yahoo.com')->send(new SendVerifyCode('48377'));
 
     // return view('mail.verifyCode', ['code' => 48377]);
 

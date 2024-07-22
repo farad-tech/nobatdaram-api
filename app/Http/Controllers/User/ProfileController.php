@@ -18,18 +18,7 @@ class ProfileController extends Controller
     {
         $user_id = auth()->id();
 
-        $profile = Profile::where('user_id', $user_id)->first();
-
-        if ($profile == null) {
-
-            $profile = Profile::create([
-                'avatar' => '/storage/avatar.jpg',
-                'name' => Str::random(4) . '-' . rand(100, 999),
-                'user_id' => $user_id,
-            ]);
-        }
-
-        return response($profile);
+        return response($this->retriveProfile($user_id));
     }
 
     /**
@@ -62,7 +51,7 @@ class ProfileController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return response($this->retriveProfile($id));
     }
 
     /**
@@ -94,5 +83,21 @@ class ProfileController extends Controller
 
         return response('Avatar removed');
 
+    }
+
+    public function retriveProfile($user_id)
+    {
+        $profile = Profile::where('user_id', $user_id)->first();
+
+        if ($profile == null) {
+
+            $profile = Profile::create([
+                'avatar' => '/storage/avatar.jpg',
+                'name' => Str::random(4) . '-' . rand(100, 999),
+                'user_id' => $user_id,
+            ]);
+        }
+
+        return $profile;
     }
 }

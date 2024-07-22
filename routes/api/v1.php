@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\User\AppointmentController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\VerificationCodeController;
 use Illuminate\Support\Facades\Route;
@@ -32,8 +33,12 @@ Route::prefix('/auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/check-auth', [AuthenticationController::class, 'checkAuth']);
   Route::post('/check-code', [VerificationCodeController::class, 'checkCode']);
-  Route::post('/send-code', [VerificationCodeController::class, 'sendCodeToUser'])->middleware(['throttle:1,2']); // one request per 1 minute (throttle:1,1)
+  Route::post('/send-code', [VerificationCodeController::class, 'sendCodeToUser'])->middleware(['throttle:1,2']); // one request per 2 minute (throttle:1,2)
 
   Route::delete('profile/delete-avatar', [ProfileController::class, 'deleteAvatar']);
-  Route::apiResource('profile', ProfileController::class);
+  Route::apiResource('profile', ProfileController::class)->except('update','destroy');
+
+  Route::apiResource('appointment', AppointmentController::class);
 });
+
+// Route::apiResource('appointment', AppointmentController::class);
