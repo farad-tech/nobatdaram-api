@@ -27,8 +27,6 @@ class AppointmentController extends Controller
             'day' => 'required|integer'
         ]);
 
-        // dd($this->calculateSlotDays(1, 1));
-
         return response($this->calculateSlotDays($request->day, $request->appointable_id));
     }
 
@@ -61,22 +59,32 @@ class AppointmentController extends Controller
             ));
 
             return response('apointed successfuly!');
-
         } else {
 
             return response('appointment slot is not free', 404);
-
         }
-
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $mode)
     {
-        //
+        /**
+         * modes:
+         *      yours
+         *      customers
+         */
+
+        switch ($mode) {
+            case 'yours':
+                return response(Appointment::where('user_id', auth()->id())->where('appointable_type', User::class)->orderBy('start_at', 'DESC')->get());
+                break;
+
+            case 'customers':
+                return response(Appointment::where('appointable_id', auth()->id())->where('appointable_type', User::class)->orderBy('start_at', 'DESC')->get());
+                break;
+        }
     }
 
     /**
@@ -92,7 +100,19 @@ class AppointmentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $appointment = Appointment::where('id', $id)->where('appointable_type', User::class)->first();
+
+        if($appointment !== null) {
+            if($appointment->user_id == auth()->id() || $appointment->appointable_id == auth()->id())
+            {
+                $appointment->delete();
+                return response('deleted successfuly');
+            } else {
+                return response('not found', 404);
+            }
+        } else {
+            return response('not found', 404);
+        }
     }
 
     public function calculateSlotUnit($i, $date)

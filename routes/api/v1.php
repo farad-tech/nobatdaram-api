@@ -42,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('/profile', ProfileController::class)->except('update','destroy');
 
   Route::apiResource('appointment', AppointmentController::class);
-
 });
 
 // Route::apiResource('appointment', AppointmentController::class);
