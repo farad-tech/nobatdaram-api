@@ -3,3 +3,4 @@ This is one of my projects that I uploaded on Github for who may be interseted. 
 
 All two sides of backend and frontend are developed by my own. Be comfortable to explore and make changes these codes.
 
+There is a quick documentaion at main directory of source code: documentation.pdf.
